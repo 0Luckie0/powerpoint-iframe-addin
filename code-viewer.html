@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Python Kod Görüntüleyici</title>
+    <!-- Prism.js ile Python Sözdizimi Renklendirme ve Satır Numaraları -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #2d2d2d;
+            overflow-y: auto; /* Dikey scroll aktif */
+            overflow-x: auto; /* Yatay scroll aktif */
+        }
+        pre[class*="language-"] {
+            margin: 0;
+            min-height: 100%;
+            box-sizing: border-box;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <pre class="line-numbers"><code id="code-block" class="language-python">Kod yükleniyor...</code></pre>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script>
+        // URL'den ?file=dosyaadi.py parametresini alır, yoksa varsayılan olarak montana_convex_hull.py yükler
+        const params = new URLSearchParams(window.location.search);
+        const fileName = params.get('file') || 'montana_convex_hull.py';
+
+        fetch(fileName)
+            .then(response => {
+                if (!response.ok) throw new Error('Dosya bulunamadı: ' + fileName);
+                return response.text();
+            })
+            .then(text => {
+                const codeBlock = document.getElementById('code-block');
+                codeBlock.textContent = text;
+                Prism.highlightElement(codeBlock);
+            })
+            .catch(err => {
+                document.getElementById('code-block').textContent = err.message;
+            });
+    </script>
+</body>
+</html>
